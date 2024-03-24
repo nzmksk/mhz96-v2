@@ -14,7 +14,7 @@ export default function ScrollableNavBar() {
 
       // Hides navbar while scrolling downwards
       navbar.style.top =
-        prevScrollPosition > currentScrollPosition ? "0" : "-54px";
+        prevScrollPosition > currentScrollPosition ? "0" : "-162px";
 
       prevScrollPosition = currentScrollPosition;
     };

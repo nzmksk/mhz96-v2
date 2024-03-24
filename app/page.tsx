@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <ScrollableNavBar />
-      <div className="p-8 mt-12 flex flex-col gap-y-4">
+      <div className="p-8 mt-20 flex flex-col gap-y-4">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Nec
