@@ -2,7 +2,9 @@
     background-color: #333;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 83.33%;
+    display: flex;
+    justify-content: space-evenly;
     opacity: 1;
     transition: top 1.0s ease-in-out, opacity 2.0s ease-in-out;
 }

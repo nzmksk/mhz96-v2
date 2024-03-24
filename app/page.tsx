@@ -2,7 +2,7 @@ import ScrollableNavBar from "@/app/ui/components/navbar";
 
 export default function Home() {
   return (
-    <>
+    <main className="flex justify-center">
       <ScrollableNavBar />
       <div className="p-8 mt-20 flex flex-col gap-y-4">
         <p>
@@ -83,6 +83,6 @@ export default function Home() {
           viverra maecenas accumsan lacus vel facilisis.
         </p>
       </div>
-    </>
+    </main>
   );
 }
