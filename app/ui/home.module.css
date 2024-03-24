@@ -3,7 +3,8 @@
     position: fixed;
     top: 0;
     width: 100%;
-    transition: top 0.3s;
+    opacity: 1;
+    transition: top 1.0s ease-in-out, opacity 2.0s ease-in-out;
 }
 
 #navbar a {

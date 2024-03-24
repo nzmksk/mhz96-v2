@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import styles from "@/app/ui/home.module.css";
 
 export default function ScrollableNavBar() {
-  // useEffect is necessary to fix "window is not defined" error 
+  // useEffect is necessary to fix "window is not defined" error
   useEffect(() => {
     let prevScrollPosition: number = window.scrollY;
 
@@ -15,6 +15,8 @@ export default function ScrollableNavBar() {
       // Hides navbar while scrolling downwards
       navbar.style.top =
         prevScrollPosition > currentScrollPosition ? "0" : "-162px";
+      navbar.style.opacity =
+        prevScrollPosition > currentScrollPosition ? "1" : "0";
 
       prevScrollPosition = currentScrollPosition;
     };
