@@ -1,28 +1,47 @@
 "use client";
 
-import React from "react";
+import Lottie from "lottie-web";
+import { AnimationItem } from "lottie-web";
+import React, { useEffect, useRef } from "react";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 
 function Body() {
   const [text, count] = useTypewriter({
-    words: [
-      "software developer.",
-      "back-end developer.",
-      "web developer.",
-      "part-time private tutor.",
-      "part-time cleaner.",
-    ],
+    words: ["software developer.", "back-end developer.", "web developer."],
     loop: true,
     delaySpeed: 2000,
   });
 
+  const animationData = require("@/public/assets/projects.json");
+  const container = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    let animationInstance: AnimationItem | undefined;
+
+    if (container.current) {
+      animationInstance = Lottie.loadAnimation({
+        container: container.current as HTMLDivElement,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+      });
+    }
+
+    return () => {
+      if (animationInstance) {
+        animationInstance.destroy();
+      }
+    };
+  }, [animationData]);
+
   return (
-    <section className="py-8">
-      <div className="px-4 mx-auto">
+    <section className="pt-4">
+      <div className="container px-4 mx-auto">
         <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
-          <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-20">
+          <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4">
             <h1 className="text-white text-3xl lg:text-5xl font-semibold">
-              My name is Hafiz and I&apos;m a
+              My name is Hafiz and I&apos;m
             </h1>
             <h1 className="text-3xl lg:text-5xl font-semibold">
               <span className="text-slate-400">{text}</span>
@@ -51,6 +70,9 @@ function Body() {
             <h1 className="text-slate-400 text-xl">
               1 Year of Experience | 5 Projects Completed
             </h1>
+          </div>
+          <div className="md:w-1/2 z-auto md:mt-0">
+            <div className="container" ref={container}></div>
           </div>
         </div>
       </div>
