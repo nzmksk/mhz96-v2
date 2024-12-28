@@ -8,7 +8,8 @@ import { Cursor, useTypewriter } from "react-simple-typewriter";
 function Body() {
   const [text, count] = useTypewriter({
     words: [
-      "self-taught developer",
+      "software engineer.",
+      "self-taught developer.",
       "software developer.",
       "back-end developer.",
       "web developer.",
@@ -57,6 +58,7 @@ function Body() {
               <button
                 className="bg-blue-400 text-white px-4 py-1 rounded mr-4 hover:bg-blue-600"
                 onClick={() => downloadResume()}
+                title="Last updated December 2024"
               >
                 Download Resume
               </button>
@@ -64,7 +66,7 @@ function Body() {
                 className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400"
                 onClick={() => openContactForm()}
               >
-                Contact Me
+                Get in Touch
               </button>
             </div>
           </div>
@@ -78,7 +80,12 @@ function Body() {
 }
 
 function downloadResume() {
-  alert("Resume download is not implemented yet.");
+  const link = document.createElement("a");
+  link.href = "/assets/resume.pdf";
+  link.download = "Mohd Hafiz Zabba - Software Engineer (Dec 2024).pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function openContactForm() {
