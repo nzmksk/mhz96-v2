@@ -1,11 +1,14 @@
 "use client";
 
-import Lottie from "lottie-web";
-import { AnimationItem } from "lottie-web";
-import React, { useEffect, useRef } from "react";
+import Lottie, { AnimationItem } from "lottie-web";
+import { Download, Mail } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 
+import ContactForm from "@/app/components/ContactForm";
+
 function Body() {
+  const [showContactForm, setShowContactForm] = useState(false);
   const [text, count] = useTypewriter({
     words: [
       "software engineer.",
@@ -42,40 +45,47 @@ function Body() {
   }, [animationData]);
 
   return (
-    <section className="pt-4">
-      <div className="container px-4 mx-auto">
-        <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
-          <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
-            <h1 className="text-white text-3xl lg:text-5xl font-semibold">
-              My name is Hafiz and I&apos;m{" "}
-              <span className="text-slate-400">
-                {text}
-                <Cursor />
-              </span>
-            </h1>
-            <h1 className="text-3xl lg:text-5xl font-semibold"></h1>
-            <div className="py-4">
-              <button
-                className="bg-blue-400 text-white px-4 py-1 rounded mr-4 hover:bg-blue-600"
-                onClick={() => downloadResume()}
-                title="Last updated December 2024"
-              >
-                Download Resume
-              </button>
-              <button
-                className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400"
-                onClick={() => openContactForm()}
-              >
-                Get in Touch
-              </button>
+    <>
+      <section className="pt-4">
+        <div className="container px-4 mx-auto">
+          <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
+            <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
+              <h1 className="text-white text-3xl lg:text-5xl font-semibold">
+                My name is Hafiz and I&apos;m{" "}
+                <span className="text-slate-400">
+                  {text}
+                  <Cursor />
+                </span>
+              </h1>
+              <h1 className="text-3xl lg:text-5xl font-semibold"></h1>
+              <div className="py-4 flex">
+                <button
+                  className="bg-blue-400 text-white px-4 py-1 rounded mr-4 hover:bg-blue-600 flex justify-center items-center gap-2"
+                  onClick={() => downloadResume()}
+                  title="Last updated December 2024"
+                >
+                  <Download />
+                  Download Resume
+                </button>
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400 flex justify-center items-center gap-2"
+                  onClick={() => setShowContactForm(true)}
+                >
+                  <Mail />
+                  Get in Touch
+                </button>
+              </div>
+            </div>
+            <div className="md:w-1/2 z-auto md:mt-0">
+              <div className="container" ref={container}></div>
             </div>
           </div>
-          <div className="md:w-1/2 z-auto md:mt-0">
-            <div className="container" ref={container}></div>
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      {showContactForm && (
+        <ContactForm onClose={() => setShowContactForm(false)} />
+      )}
+    </>
   );
 }
 
@@ -86,10 +96,6 @@ function downloadResume() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
-
-function openContactForm() {
-  alert("Contact form is not implemented yet.");
 }
 
 export default Body;
