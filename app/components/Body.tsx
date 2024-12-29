@@ -46,7 +46,7 @@ function Body() {
 
   return (
     <>
-      <section className="pt-4">
+      <section className="pt-4" id="home">
         <div className="container px-4 mx-auto">
           <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
             <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">

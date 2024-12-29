@@ -7,7 +7,7 @@ interface ContactFormProps {
 }
 
 function ContactForm({ onClose }: ContactFormProps) {
-  const modalRef = useRef<HTMLElement>(null);
+  const modalRef = useRef<HTMLElement | null>(null);
 
   const closeContactForm = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
