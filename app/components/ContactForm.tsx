@@ -82,13 +82,13 @@ function ContactForm({ onClose }: ContactFormProps) {
             ></textarea>
           </div>
 
-          <div className="flex flex-row justify-between">
-            <button className="bg-blue-700 hover:bg-blue-500 text-slate-100 py-3 mr-4 w-1/2 rounded-lg shadow-lg">
+          <div className="flex flex-row justify-between text-slate-100">
+            <button className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg">
               Send
             </button>
 
             <button
-              className="bg-slate-900 hover:bg-slate-700 text-slate-100 py-3 w-1/2 rounded-lg shadow-lg"
+              className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
               onClick={onClose}
             >
               Close
