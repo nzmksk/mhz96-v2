@@ -23,7 +23,11 @@ function ContactForm({ onClose }: ContactFormProps) {
       id="contact-form"
     >
       <div className="bg-white flex flex-col max-w-md p-4 rounded">
-        <form>
+        <form
+          action="https://formsubmit.co/26e981ca81afea7298ca5e83e93dac4c"
+          method="POST"
+          target="_blank"
+        >
           <label htmlFor="name">Name</label>
           <input
             type="text"
