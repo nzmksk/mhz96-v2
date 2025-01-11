@@ -1,6 +1,8 @@
 import React from "react";
 
 function Header() {
+  const sections = ["Home", "Experience", "Skills"];
+
   return (
     <header className="p-4">
       <div className="mx-10 sm:mx-auto max-w-6xl px-4 py-3 flex items-center justify-between border border-zinc-600 rounded-2xl">
@@ -16,32 +18,19 @@ function Header() {
         </div>
 
         <div className="hidden sm:flex flex-row space-x-4 text-white">
-          <a
-            className="group transition-all duration-300 ease-in-out"
-            href="#home"
-          >
-            <span className="bg-left-bottom bg-gradient-to-r from-slate-400 to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-              Home
-            </span>
-          </a>
-
-          <a className="group transition-all duration-300 ease-in-out">
-            <span className="bg-left-bottom bg-gradient-to-r from-slate-400 to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-              About
-            </span>
-          </a>
-
-          <a className="group transition-all duration-300 ease-in-out">
-            <span className="bg-left-bottom bg-gradient-to-r from-slate-400 to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-              Experience
-            </span>
-          </a>
-
-          <a className="group transition-all duration-300 ease-in-out">
-            <span className="bg-left-bottom bg-gradient-to-r from-slate-400 to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
-              Skills
-            </span>
-          </a>
+          {sections.map((section) => {
+            return (
+                <a
+                className="group transition-all duration-300 ease-in-out"
+                href={`#${section.toLowerCase()}`}
+                key={section}
+                >
+                <span className="bg-left-bottom bg-gradient-to-r from-slate-400 to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out">
+                  {section}
+                </span>
+                </a>
+            );
+          })}
         </div>
 
         <div className="flex space-x-4 items-center">
