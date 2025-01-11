@@ -1,13 +1,22 @@
 "use client";
 
-import Lottie from "lottie-web";
-import { AnimationItem } from "lottie-web";
-import React, { useEffect, useRef } from "react";
+import Lottie, { AnimationItem } from "lottie-web";
+import { Download, Mail } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 
+import ContactForm from "@/app/components/ContactForm";
+
 function Body() {
+  const [showContactForm, setShowContactForm] = useState(false);
   const [text, count] = useTypewriter({
-    words: ["software developer.", "back-end developer.", "web developer."],
+    words: [
+      "software engineer.",
+      "self-taught developer.",
+      "software developer.",
+      "back-end developer.",
+      "web developer.",
+    ],
     loop: true,
     delaySpeed: 2000,
   });
@@ -36,48 +45,57 @@ function Body() {
   }, [animationData]);
 
   return (
-    <section className="pt-4">
-      <div className="container px-4 mx-auto">
-        <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
-          <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4">
-            <h1 className="text-white text-3xl lg:text-5xl font-semibold">
-              My name is Hafiz and I&apos;m
-            </h1>
-            <h1 className="text-3xl lg:text-5xl font-semibold">
-              <span className="text-slate-400">{text}</span>
-              <Cursor />
-            </h1>
-            <p className="text-white text-xl md:text-2xl mb-3 mt-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <div>
-              <button className="bg-blue-400 text-white px-4 py-1 rounded mr-4 hover:bg-blue-600">
-                Learn More
-              </button>
-              <button className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400">
-                Contact Me
-              </button>
+    <>
+      <section>
+        <div className="container px-4 mx-auto">
+          <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
+            <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
+              <h1 className="text-white text-3xl lg:text-5xl font-semibold">
+                My name is Hafiz and I&apos;m{" "}
+                <span className="text-slate-400">
+                  {text}
+                  <Cursor />
+                </span>
+              </h1>
+              <div className="py-4 flex text-white w-full justify-between md:justify-start">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 p-3 rounded-lg hover:shadow-lg mr-4 w-1/2 flex justify-center items-center gap-2"
+                  onClick={() => downloadResume()}
+                  title="Last updated December 2024"
+                >
+                  <Download className="hidden lg:block"/>
+                  Download Resume
+                </button>
+
+                <button
+                  className="bg-slate-500 hover:bg-slate-900 p-3 rounded-lg hover:shadow-lg w-1/2 flex justify-center items-center gap-2"
+                  onClick={() => setShowContactForm(true)}
+                >
+                  <Mail className="hidden lg:block"/>
+                  Get in Touch
+                </button>
+              </div>
             </div>
-            <p className="text-blue-500 text-small font-normal mt-2">
-              Coding | Learnings | Lifestyle
-            </p>
-            <h1 className="text-slate-400 text-xl">
-              1 Year of Experience | 5 Projects Completed
-            </h1>
-          </div>
-          <div className="md:w-1/2 z-auto md:mt-0">
-            <div className="container" ref={container}></div>
+            <div className="md:w-1/2 z-auto md:mt-0">
+              <div className="container" ref={container}></div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      {showContactForm && (
+        <ContactForm onClose={() => setShowContactForm(false)} />
+      )}
+    </>
   );
+}
+
+function downloadResume() {
+  const link = document.createElement("a");
+  link.href = "/assets/resume.pdf";
+  link.download = "Mohd Hafiz Zabba - Software Engineer (Dec 2024).pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 export default Body;
