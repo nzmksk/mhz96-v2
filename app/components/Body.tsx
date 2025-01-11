@@ -51,7 +51,7 @@ function Body() {
           <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
             <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
               <h1 className="text-white text-3xl lg:text-5xl font-semibold">
-                My name is Hafiz and I&apos;m{" "}
+                My name is Hafiz and I&apos;m a {" "}
                 <span className="text-slate-400">
                   {text}
                   <Cursor />
