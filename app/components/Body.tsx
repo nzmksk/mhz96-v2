@@ -46,9 +46,9 @@ function Body() {
 
   return (
     <>
-      <section className="pt-4" id="home">
+      <section>
         <div className="container px-4 mx-auto">
-          <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-8">
+          <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
             <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
               <h1 className="text-white text-3xl lg:text-5xl font-semibold">
                 My name is Hafiz and I&apos;m{" "}
@@ -57,21 +57,21 @@ function Body() {
                   <Cursor />
                 </span>
               </h1>
-              <h1 className="text-3xl lg:text-5xl font-semibold"></h1>
-              <div className="py-4 flex">
+              <div className="py-4 flex text-white w-full justify-between md:justify-start">
                 <button
-                  className="bg-blue-400 text-white px-4 py-1 rounded mr-4 hover:bg-blue-600 flex justify-center items-center gap-2"
+                  className="bg-blue-500 hover:bg-blue-700 p-3 rounded-lg hover:shadow-lg mr-4 w-1/2 flex justify-center items-center gap-2"
                   onClick={() => downloadResume()}
                   title="Last updated December 2024"
                 >
-                  <Download />
+                  <Download className="hidden lg:block"/>
                   Download Resume
                 </button>
+
                 <button
-                  className="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400 flex justify-center items-center gap-2"
+                  className="bg-slate-500 hover:bg-slate-900 p-3 rounded-lg hover:shadow-lg w-1/2 flex justify-center items-center gap-2"
                   onClick={() => setShowContactForm(true)}
                 >
-                  <Mail />
+                  <Mail className="hidden lg:block"/>
                   Get in Touch
                 </button>
               </div>
