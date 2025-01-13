@@ -1,17 +1,17 @@
-import React from 'react'
+import React from "react";
 
-interface SectionContainerProps {
-    children: React.ReactNode
-    className?: string
-    id?: string
+interface Props {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
 }
 
-function SectionContainer({children, className, id}: SectionContainerProps) {
+function SectionContainer({ children, className, id }: Props) {
   return (
-    <div className={`min-h-screen ${className}`} id={id}>
-        {children}
-    </div>
-  )
+    <section className={`min-h-screen ${className ?? ""}`} id={id}>
+      {children}
+    </section>
+  );
 }
 
-export default SectionContainer
+export default SectionContainer;
