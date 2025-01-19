@@ -13,7 +13,10 @@ export default function Home() {
         <Header />
         <Body />
       </SectionContainer>
-      <SectionContainer className="bg-slate-800" id="experience">
+      <SectionContainer
+        className="bg-slate-800 flex flex-col justify-center text-white"
+        id="experience"
+      >
         <Experience />
       </SectionContainer>
     </main>
