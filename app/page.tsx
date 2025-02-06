@@ -1,7 +1,8 @@
 import Body from "@/app/components/Body";
-import Experience from "./components/Experience";
+import Experience from "@/app/components/Experience";
 import Header from "@/app/components/Header";
-import SectionContainer from "./components/SectionContainer";
+import Projects from "@/app/components/Projects";
+import SectionContainer from "@/app/components/SectionContainer";
 
 export default function Home() {
   return (
@@ -19,6 +20,9 @@ export default function Home() {
       >
         <Experience />
       </SectionContainer>
+      <SectionContainer className="bg-slate-600" id="projects">
+        <Projects />
+      </SectionContainer> 
     </main>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Linkedin, Github, Twitter } from "lucide-react";
 
 function Header() {
-  const sections = ["Home", "Experience", "Skills"];
+  const sections = ["Home", "Experience", "Projects"];
 
   return (
     <header className="p-4">
