@@ -32,6 +32,8 @@ import javascript from "@/public/assets/javascript.svg";
 import javascriptColored from "@/public/assets/javascript-colored.svg";
 import jquery from "@/public/assets/jquery.svg";
 import jqueryColored from "@/public/assets/jquery-colored.svg";
+import kubernetes from "@/public/assets/kubernetes.svg";
+import kubernetesColored from "@/public/assets/kubernetes-colored.svg";
 import materialUi from "@/public/assets/material-ui.svg";
 import materialUiColored from "@/public/assets/material-ui-colored.svg";
 import nodejs from "@/public/assets/nodejs.svg";
@@ -78,14 +80,16 @@ function Experience() {
       position: "Back End Developer",
       stackSrc: [
         { src: perl, alt: "Perl", onHover: perlColored },
-        { src: postgresql, alt: "PostgreSQL", onHover: postgresqlColored },
-        { src: redis, alt: "Redis", onHover: redisColored },
+        { src: go, alt: "Go", onHover: goColored },
+        { src: python, alt: "Python", onHover: pythonColored },
         { src: html5, alt: "HTML5", onHover: html5Colored },
         { src: javascript, alt: "JavaScript", onHover: javascriptColored },
-        { src: datadog, alt: "DataDog", onHover: datadogColored },
-        { src: go, alt: "Go", onHover: goColored },
         { src: jquery, alt: "jQuery", onHover: jqueryColored },
+        { src: redis, alt: "Redis", onHover: redisColored },
+        { src: postgresql, alt: "PostgreSQL", onHover: postgresqlColored },
+        { src: datadog, alt: "DataDog", onHover: datadogColored },
         { src: docker, alt: "Docker", onHover: dockerColored },
+        { src: kubernetes, alt: "Kubernetes", onHover: kubernetesColored },
       ],
     },
     {
