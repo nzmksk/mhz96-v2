@@ -42,13 +42,6 @@ function Header() {
             </a>
           </button>
 
-          <button className="hidden sm:inline border border-slate-900 text-white bg-sky-600 hover:bg-sky-400 px-4 py-2 rounded-lg hover:shadow-lg">
-            <a href="https://x.com/mssngnnja" target="_blank">
-              <Twitter className="inline" />
-              <span className="hidden lg:inline lg:ml-2">Twitter</span>
-            </a>
-          </button>
-
           <button className="border text-white border-slate-900 hover:bg-slate-700 px-4 py-2 rounded-lg hover:shadow-lg">
             <a href="https://github.com/nzmksk" target="_blank">
               <Github className="inline" />
