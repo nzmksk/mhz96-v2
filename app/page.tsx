@@ -1,7 +1,7 @@
-import Body from "@/app/components/Body";
-import Experience from "@/app/components/Experience";
-import Header from "@/app/components/Header";
-import Projects from "@/app/components/Projects";
+import Body from "@/app/components/Home/Body";
+import Experience from "@/app/components/Experience/Experience";
+import Header from "@/app/components/Home/Header";
+import Projects from "@/app/components/Projects/Projects";
 import SectionContainer from "@/app/components/SectionContainer";
 
 export default function Home() {
