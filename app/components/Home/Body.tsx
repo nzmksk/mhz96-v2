@@ -1,14 +1,16 @@
 "use client";
 
 import Lottie, { AnimationItem } from "lottie-web";
-import { Download, Mail } from "lucide-react";
+import { Bug, Mail } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 
-import ContactForm from "@/app/components/ContactForm";
+import ContactForm from "@/app/components/Home/ContactForm";
+import ReportBugForm from "@/app/components/Home/ReportBugForm";
 
 function Body() {
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showReportBugForm, setShowReportBugForm] = useState(false);
   const [text, count] = useTypewriter({
     words: [
       "software engineer.",
@@ -59,19 +61,17 @@ function Body() {
             <div className="py-4 flex text-white w-full justify-between md:justify-start">
               <button
                 className="bg-blue-500 hover:bg-blue-700 p-3 rounded-lg hover:shadow-lg mr-4 w-1/2 flex justify-center items-center gap-2"
-                onClick={() => downloadResume()}
-                title="Last updated December 2024"
-              >
-                <Download className="hidden lg:block" />
-                Download Resume
-              </button>
-
-              <button
-                className="bg-slate-500 hover:bg-slate-900 p-3 rounded-lg hover:shadow-lg w-1/2 flex justify-center items-center gap-2"
                 onClick={() => setShowContactForm(true)}
               >
                 <Mail className="hidden lg:block" />
                 Get in Touch
+              </button>
+              <button
+                className="bg-slate-500 hover:bg-slate-900 p-3 rounded-lg hover:shadow-lg w-1/2 flex justify-center items-center gap-2"
+                onClick={() => setShowReportBugForm(true)}
+              >
+                <Bug className="hidden lg:block" />
+                Report a Bug
               </button>
             </div>
           </div>
@@ -83,17 +83,11 @@ function Body() {
       {showContactForm && (
         <ContactForm onClose={() => setShowContactForm(false)} />
       )}
+      {showReportBugForm && (
+        <ReportBugForm onClose={() => setShowReportBugForm(false)} />
+      )}
     </>
   );
-}
-
-function downloadResume() {
-  const link = document.createElement("a");
-  link.href = "/assets/resume.pdf";
-  link.download = "Mohd Hafiz Zabba - Software Engineer (Dec 2024).pdf";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }
 
 export default Body;
