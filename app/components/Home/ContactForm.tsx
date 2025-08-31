@@ -83,7 +83,10 @@ function ContactForm({ onClose }: ContactFormProps) {
           </div>
 
           <div className="flex flex-row justify-between text-slate-100">
-            <button className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg"
+              type="submit"
+            >
               Send
             </button>
 

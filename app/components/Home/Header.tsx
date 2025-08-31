@@ -2,7 +2,7 @@ import React from "react";
 import { Linkedin, Github, Twitter } from "lucide-react";
 
 function Header() {
-  const sections = ["Home", "Experience", "Skills"];
+  const sections = ["Home", "Experience", "Projects"];
 
   return (
     <header className="p-4">
@@ -39,13 +39,6 @@ function Header() {
             <a href="https://www.linkedin.com/in/mhz96/" target="_blank">
               <Linkedin className="inline" />
               <span className="hidden lg:inline lg:ml-2">LinkedIn</span>
-            </a>
-          </button>
-
-          <button className="hidden sm:inline border border-slate-900 text-white bg-sky-600 hover:bg-sky-400 px-4 py-2 rounded-lg hover:shadow-lg">
-            <a href="https://x.com/mssngnnja" target="_blank">
-              <Twitter className="inline" />
-              <span className="hidden lg:inline lg:ml-2">Twitter</span>
             </a>
           </button>
 
