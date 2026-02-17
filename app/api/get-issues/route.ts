@@ -37,18 +37,18 @@ export async function GET() {
     });
 
     // Extract only the fields we need to reduce payload size
-    const issues = response.data.map((issue: any) => ({
-      number: issue.number,
-      title: issue.title,
-      state: issue.state,
-      html_url: issue.html_url,
-      created_at: issue.created_at,
-      labels: issue.labels.map((label: any) => ({
-        name: label.name,
-        color: label.color,
-      })),
-      comments: issue.comments,
-    }));
+    const issues = response.data
+      .map((issue: any) => ({
+        number: issue.number,
+        title: issue.title,
+        html_url: issue.html_url,
+        created_at: issue.created_at,
+        labels: issue.labels.map((label: any) => ({
+          name: label.name,
+          color: label.color,
+        })),
+      }))
+      .filter((issue: any) => !issue.html_url.includes("/pull/")); // Exclude pull requests
 
     // Update cache
     cachedIssues = issues;
