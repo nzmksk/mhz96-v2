@@ -121,9 +121,9 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       ref={modalRef}
     >
       <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden">
-        <div className="flex flex-col md:flex-row h-full">
+        <div className="flex flex-col md:flex-row h-full overflow-hidden">
           {/* Issue List - Left on desktop, Top on mobile */}
-          <div className="w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex items-center justify-center">
+          <div className="w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex items-center justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible">
             <IssueList
               issues={issues}
               isLoading={isLoadingIssues}
@@ -133,7 +133,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
           </div>
 
           {/* Bug Submission Form - Right on desktop, Bottom on mobile */}
-          <div className="w-full md:w-3/5">
+          <div className="w-full md:w-3/5 flex-1 overflow-y-auto">
             <BugSubmissionForm
               onSubmit={handleSubmit}
               onCancel={onClose}

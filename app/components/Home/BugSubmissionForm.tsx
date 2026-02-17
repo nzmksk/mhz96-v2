@@ -14,7 +14,7 @@ function BugSubmissionForm({
   isLoading,
 }: BugSubmissionFormProps) {
   return (
-    <div className="p-4 overflow-y-auto max-h-[70vh]">
+    <div className="p-4">
       <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
 
       <form onSubmit={onSubmit}>

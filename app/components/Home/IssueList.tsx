@@ -45,7 +45,7 @@ function IssueList({ issues, isLoading, error, onRefresh }: IssueListProps) {
   }
 
   return (
-    <div className="p-4 overflow-y-auto max-h-[70vh] w-full">
+    <div className="p-4 w-full">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Open Issues ({issues.length})</h3>
         <button
