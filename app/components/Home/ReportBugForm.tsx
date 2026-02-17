@@ -15,6 +15,7 @@ type BugReportData = {
   browser?: string;
   details: string;
   nickname?: string;
+  honeypot?: string;
 };
 
 function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
@@ -40,6 +41,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       browser: (form.get("Browser") as string) ?? "",
       details: (form.get("Bug Details") as string) ?? "",
       nickname: (form.get("Nickname") as string) ?? "Anonymous",
+      honeypot: (form.get("Name") as string) ?? "",
     };
 
     try {
@@ -178,6 +180,18 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
                 id="nickname"
                 name="Nickname"
                 placeholder="Leave blank if you want to stay anonymous."
+              />
+            </div>
+
+            {/* Honeypot field - hidden from users, visible to bots */}
+            <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
+              <label htmlFor="Name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="Name"
+                tabIndex={-1}
+                autoComplete="off"
               />
             </div>
 
