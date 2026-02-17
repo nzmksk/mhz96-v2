@@ -19,6 +19,7 @@ type BugReportData = {
 function ReportBugForm({ onClose }: ReportBugFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [isError, setIsError] = useState<boolean>(false);
   const modalRef = useRef<HTMLElement | null>(null);
 
   const closeReportBugForm = (e: React.MouseEvent<HTMLElement>) => {
@@ -47,6 +48,7 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
       setMessage(
         "Bug report submitted successfully. Thank you for your contribution!"
       );
+      setIsError(false);
     } catch (error) {
       if (error instanceof Error) {
         console.error("GitHub API error:", error.message);
@@ -55,6 +57,7 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
         console.error("Unknown error:", error);
         setMessage("Failed to submit bug report due to an unknown error.");
       }
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +71,19 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
     >
       <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg max-h-[90vh] overflow-y-auto p-8 w-full">
         <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
+
+        {message && (
+          <div
+            className={`mb-4 p-3 rounded-lg ${
+              isError
+                ? "bg-red-100 text-red-700 border border-red-400"
+                : "bg-green-100 text-green-700 border border-green-400"
+            }`}
+            role="alert"
+          >
+            {message}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           {/* Bug type */}
@@ -197,7 +213,6 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
               Cancel
             </button>
           </div>
-          {message && <p>{message}</p>}
         </form>
       </div>
     </section>
