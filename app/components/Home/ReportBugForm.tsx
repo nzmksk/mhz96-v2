@@ -41,7 +41,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       browser: (form.get("Browser") as string) ?? "",
       details: (form.get("Bug Details") as string) ?? "",
       nickname: (form.get("Nickname") as string) ?? "Anonymous",
-      honeypot: (form.get("website") as string) ?? "",
+      honeypot: (form.get("Name") as string) ?? "",
     };
 
     try {
@@ -185,11 +185,11 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
 
             {/* Honeypot field - hidden from users, visible to bots */}
             <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
-              <label htmlFor="website">Website</label>
+              <label htmlFor="Name">Name</label>
               <input
                 type="text"
-                id="website"
-                name="website"
+                id="name"
+                name="Name"
                 tabIndex={-1}
                 autoComplete="off"
               />
