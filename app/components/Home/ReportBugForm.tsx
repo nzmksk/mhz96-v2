@@ -50,6 +50,9 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
         "Bug report submitted successfully. Thank you for your contribution!",
         "success"
       );
+
+      // Close the form after successful submission
+      onClose();
     } catch (error) {
       if (error instanceof Error) {
         console.error("GitHub API error:", error.message);
