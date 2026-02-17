@@ -95,7 +95,8 @@ function IssueCard({ issue }: { issue: GitHubIssue }) {
               key={label.name}
               className="text-xs px-2 py-0.5 rounded-full"
               style={{
-                backgroundColor: `#${label.color}20`,
+                // If the label color is very light (like 'ededed'), use a darker background for better contrast
+                backgroundColor: label.color == 'ededed' ? `#334155` : `#${label.color}20`,
                 color: `#${label.color}`,
                 border: `1px solid #${label.color}40`,
               }}
