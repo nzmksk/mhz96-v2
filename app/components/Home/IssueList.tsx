@@ -45,7 +45,7 @@ function IssueList({ issues, isLoading, error, onRefresh }: IssueListProps) {
   }
 
   return (
-    <div className="p-4 overflow-y-auto max-h-[70vh]">
+    <div className="p-4 overflow-y-auto max-h-[70vh] w-full">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Open Issues ({issues.length})</h3>
         <button
@@ -126,7 +126,7 @@ function IssueCard({ issue }: { issue: GitHubIssue }) {
 
 function IssueListSkeleton() {
   return (
-    <div className="p-4">
+    <div className="p-4 w-full">
       <div className="flex justify-between items-center mb-4">
         <div className="h-6 w-32 bg-slate-200 rounded animate-pulse"></div>
         <div className="h-8 w-8 bg-slate-200 rounded-lg animate-pulse"></div>
