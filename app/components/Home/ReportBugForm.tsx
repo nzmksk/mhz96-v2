@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 
 interface ReportBugFormProps {
   onClose: () => void;
+  showSnackbar: (message: string, type: "success" | "error") => void;
 }
 
 type BugReportData = {
@@ -16,10 +17,8 @@ type BugReportData = {
   nickname?: string;
 };
 
-function ReportBugForm({ onClose }: ReportBugFormProps) {
+function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [isError, setIsError] = useState<boolean>(false);
   const modalRef = useRef<HTMLElement | null>(null);
 
   const closeReportBugForm = (e: React.MouseEvent<HTMLElement>) => {
@@ -45,19 +44,18 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
 
     try {
       await createGithubIssue(data);
-      setMessage(
-        "Bug report submitted successfully. Thank you for your contribution!"
+      showSnackbar(
+        "Bug report submitted successfully. Thank you for your contribution!",
+        "success"
       );
-      setIsError(false);
     } catch (error) {
       if (error instanceof Error) {
         console.error("GitHub API error:", error.message);
-        setMessage(`Failed to submit bug report: ${error.message}`);
+        showSnackbar(`Failed to submit bug report: ${error.message}`, "error");
       } else {
         console.error("Unknown error:", error);
-        setMessage("Failed to submit bug report due to an unknown error.");
+        showSnackbar("Failed to submit bug report due to an unknown error.", "error");
       }
-      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -72,150 +70,137 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
       <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg max-h-[90vh] overflow-y-auto p-8 w-full">
         <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
 
-        {message && (
-          <div
-            className={`mb-4 p-3 rounded-lg ${
-              isError
-                ? "bg-red-100 text-red-700 border border-red-400"
-                : "bg-green-100 text-green-700 border border-green-400"
-            }`}
-            role="alert"
-          >
-            {message}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
-          {/* Bug type */}
-          <div className="mb-4">
-            <label htmlFor="bug-type">
-              Bug Type<span className="text-red-700">*</span>
-            </label>
-            <select
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="bug-type"
-              name="Bug Type"
-              required
-            >
-              <option value="" disabled selected hidden>
-                Select a bug type
-              </option>
-              <option value="uiux">UI/UX</option>
-              <option value="logic">Functional/Logic errors</option>
-              <option value="security">Security issues</option>
-              <option value="performance">Performance defects</option>
-              <option value="others">Others</option>
-            </select>
-          </div>
+            {/* Bug type */}
+            <div className="mb-4">
+              <label htmlFor="bug-type">
+                Bug Type<span className="text-red-700">*</span>
+              </label>
+              <select
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="bug-type"
+                name="Bug Type"
+                required
+              >
+                <option value="" disabled selected hidden>
+                  Select a bug type
+                </option>
+                <option value="uiux">UI/UX</option>
+                <option value="logic">Functional/Logic errors</option>
+                <option value="security">Security issues</option>
+                <option value="performance">Performance defects</option>
+                <option value="others">Others</option>
+              </select>
+            </div>
 
-          {/* Title */}
-          <div className="mb-4">
-            <label htmlFor="title">
-              Title<span className="text-red-700">*</span>
-            </label>
-            <input
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="title"
-              name="Title"
-              placeholder="Short description about the bug."
-              required
-            />
-          </div>
+            {/* Title */}
+            <div className="mb-4">
+              <label htmlFor="title">
+                Title<span className="text-red-700">*</span>
+              </label>
+              <input
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="title"
+                name="Title"
+                placeholder="Short description about the bug."
+                required
+              />
+            </div>
 
-          {/* Device type */}
-          <div className="mb-4">
-            <label htmlFor="device">Device Type</label>
-            <select
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="device"
-              name="Device Type"
-            >
-              <option value="" disabled selected hidden>
-                Select your device type
-              </option>
-              <option value="desktop">Desktop</option>
-              <option value="tablet">Tablet</option>
-              <option value="mobile">Mobile</option>
-            </select>
-          </div>
+            {/* Device type */}
+            <div className="mb-4">
+              <label htmlFor="device">Device Type</label>
+              <select
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="device"
+                name="Device Type"
+              >
+                <option value="" disabled selected hidden>
+                  Select your device type
+                </option>
+                <option value="desktop">Desktop</option>
+                <option value="tablet">Tablet</option>
+                <option value="mobile">Mobile</option>
+              </select>
+            </div>
 
-          {/* Operating system */}
-          <div className="mb-4">
-            <label htmlFor="operating-system">Operating System</label>
-            <select
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="operating-system"
-              name="Operating System"
-            >
-              <option value="" disabled selected hidden>
-                Select your operating system
-              </option>
-              <option value="windows">Windows</option>
-              <option value="macos">MacOS</option>
-              <option value="linux">Linux</option>
-              <option value="android">Android</option>
-              <option value="ios">iOS</option>
-              <option value="other-os">Others</option>
-            </select>
-          </div>
+            {/* Operating system */}
+            <div className="mb-4">
+              <label htmlFor="operating-system">Operating System</label>
+              <select
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="operating-system"
+                name="Operating System"
+              >
+                <option value="" disabled selected hidden>
+                  Select your operating system
+                </option>
+                <option value="windows">Windows</option>
+                <option value="macos">MacOS</option>
+                <option value="linux">Linux</option>
+                <option value="android">Android</option>
+                <option value="ios">iOS</option>
+                <option value="other-os">Others</option>
+              </select>
+            </div>
 
-          {/* Browser */}
-          <div className="mb-4">
-            <label htmlFor="browser">Browser</label>
-            <input
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="browser"
-              name="Browser"
-              placeholder="Please include the version, e.g. chrome-v140.0.0"
-            />
-          </div>
+            {/* Browser */}
+            <div className="mb-4">
+              <label htmlFor="browser">Browser</label>
+              <input
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="browser"
+                name="Browser"
+                placeholder="Please include the version, e.g. chrome-v140.0.0"
+              />
+            </div>
 
-          {/* Details */}
-          <div className="mb-4">
-            <label htmlFor="bug-details">
-              Bug Details<span className="text-red-700">*</span>
-            </label>
-            <textarea
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="bug-details"
-              name="Bug Details"
-              placeholder="Please provide the details or steps to reproduce the bug."
-              rows={5}
-              required
-            ></textarea>
-          </div>
+            {/* Details */}
+            <div className="mb-4">
+              <label htmlFor="bug-details">
+                Bug Details<span className="text-red-700">*</span>
+              </label>
+              <textarea
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="bug-details"
+                name="Bug Details"
+                placeholder="Please provide the details or steps to reproduce the bug."
+                rows={5}
+                required
+              ></textarea>
+            </div>
 
-          {/* Nickname */}
-          <div className="mb-4">
-            <label htmlFor="nickname">Your Name/Nickname</label>
-            <input
-              className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-              id="nickname"
-              name="Nickname"
-              placeholder="Leave blank if you want to stay anonymous."
-            />
-          </div>
+            {/* Nickname */}
+            <div className="mb-4">
+              <label htmlFor="nickname">Your Name/Nickname</label>
+              <input
+                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
+                id="nickname"
+                name="Nickname"
+                placeholder="Leave blank if you want to stay anonymous."
+              />
+            </div>
 
-          {/* Buttons */}
-          <div className="flex flex-row justify-between text-slate-100">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg"
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? "Submitting..." : "Submit Bug Report"}
-            </button>
+            {/* Buttons */}
+            <div className="flex flex-row justify-between text-slate-100">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Submitting..." : "Submit Bug Report"}
+              </button>
 
-            <button
-              className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
+              <button
+                className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
   );
 }
 
