@@ -66,7 +66,7 @@ function ReportBugForm({ onClose }: ReportBugFormProps) {
       onClick={closeReportBugForm}
       ref={modalRef}
     >
-      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg p-8 w-full">
+      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg max-h-[90vh] overflow-y-auto p-8 w-full">
         <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
 
         <form onSubmit={handleSubmit}>
