@@ -15,7 +15,8 @@ function BugSubmissionForm({
 }: BugSubmissionFormProps) {
   return (
     <div className="p-4">
-      <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
+      <h2 className="text-lg font-bold">Report a Bug</h2>
+      <h3 className="text-sm text-slate-500 mb-4 italic">Please check all open issues before submitting a new one.</h3>
 
       <form onSubmit={onSubmit}>
         {/* Bug type */}
@@ -119,7 +120,7 @@ function BugSubmissionForm({
 
         {/* Nickname */}
         <div className="mb-4">
-          <label htmlFor="nickname">Your Name/Nickname</label>
+          <label htmlFor="nickname">Your Name / GitHub Username</label>
           <input
             className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
             id="nickname"
