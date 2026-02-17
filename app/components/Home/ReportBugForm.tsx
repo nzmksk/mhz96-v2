@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import IssueList from "@/app/components/Home/IssueList";
+import BugSubmissionForm from "@/app/components/Home/BugSubmissionForm";
 
 interface ReportBugFormProps {
   onClose: () => void;
@@ -18,8 +20,26 @@ type BugReportData = {
   honeypot?: string;
 };
 
+interface GitHubLabel {
+  name: string;
+  color: string;
+}
+
+interface GitHubIssue {
+  number: number;
+  title: string;
+  state: string;
+  html_url: string;
+  created_at: string;
+  labels: GitHubLabel[];
+  comments: number;
+}
+
 function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [issues, setIssues] = useState<GitHubIssue[]>([]);
+  const [isLoadingIssues, setIsLoadingIssues] = useState<boolean>(true);
+  const [issuesError, setIssuesError] = useState<string | null>(null);
   const modalRef = useRef<HTMLElement | null>(null);
 
   const closeReportBugForm = (e: React.MouseEvent<HTMLElement>) => {
@@ -27,6 +47,31 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       onClose();
     }
   };
+
+  async function fetchIssues() {
+    setIsLoadingIssues(true);
+    setIssuesError(null);
+
+    try {
+      const response = await fetch("/api/get-issues");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch issues");
+      }
+
+      setIssues(data.issues || []);
+    } catch (err: any) {
+      console.error("Error fetching issues:", err);
+      setIssuesError(err.message || "Failed to load issues");
+    } finally {
+      setIsLoadingIssues(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchIssues();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,6 +96,9 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
         "success"
       );
 
+      // Refresh the issues list to show the new issue
+      await fetchIssues();
+
       // Close the form after successful submission
       onClose();
     } catch (error) {
@@ -68,156 +116,33 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
 
   return (
     <section
-      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center"
+      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center p-4"
       onClick={closeReportBugForm}
       ref={modalRef}
     >
-      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg max-h-[90vh] overflow-y-auto p-8 w-full">
-        <h2 className="text-lg font-bold mb-4">Report a Bug</h2>
+      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden">
+        <div className="flex flex-col md:flex-row h-full overflow-hidden">
+          {/* Issue List - Left on desktop, Top on mobile */}
+          <div className="w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex items-center justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible">
+            <IssueList
+              issues={issues}
+              isLoading={isLoadingIssues}
+              error={issuesError}
+              onRefresh={fetchIssues}
+            />
+          </div>
 
-        <form onSubmit={handleSubmit}>
-            {/* Bug type */}
-            <div className="mb-4">
-              <label htmlFor="bug-type">
-                Bug Type<span className="text-red-700">*</span>
-              </label>
-              <select
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="bug-type"
-                name="Bug Type"
-                required
-              >
-                <option value="" disabled selected hidden>
-                  Select a bug type
-                </option>
-                <option value="uiux">UI/UX</option>
-                <option value="logic">Functional/Logic errors</option>
-                <option value="security">Security issues</option>
-                <option value="performance">Performance defects</option>
-                <option value="others">Others</option>
-              </select>
-            </div>
-
-            {/* Title */}
-            <div className="mb-4">
-              <label htmlFor="title">
-                Title<span className="text-red-700">*</span>
-              </label>
-              <input
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="title"
-                name="Title"
-                placeholder="Short description about the bug."
-                required
-              />
-            </div>
-
-            {/* Device type */}
-            <div className="mb-4">
-              <label htmlFor="device">Device Type</label>
-              <select
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="device"
-                name="Device Type"
-              >
-                <option value="" disabled selected hidden>
-                  Select your device type
-                </option>
-                <option value="desktop">Desktop</option>
-                <option value="tablet">Tablet</option>
-                <option value="mobile">Mobile</option>
-              </select>
-            </div>
-
-            {/* Operating system */}
-            <div className="mb-4">
-              <label htmlFor="operating-system">Operating System</label>
-              <select
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="operating-system"
-                name="Operating System"
-              >
-                <option value="" disabled selected hidden>
-                  Select your operating system
-                </option>
-                <option value="windows">Windows</option>
-                <option value="macos">MacOS</option>
-                <option value="linux">Linux</option>
-                <option value="android">Android</option>
-                <option value="ios">iOS</option>
-                <option value="other-os">Others</option>
-              </select>
-            </div>
-
-            {/* Browser */}
-            <div className="mb-4">
-              <label htmlFor="browser">Browser</label>
-              <input
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="browser"
-                name="Browser"
-                placeholder="Please include the version, e.g. chrome-v140.0.0"
-              />
-            </div>
-
-            {/* Details */}
-            <div className="mb-4">
-              <label htmlFor="bug-details">
-                Bug Details<span className="text-red-700">*</span>
-              </label>
-              <textarea
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="bug-details"
-                name="Bug Details"
-                placeholder="Please provide the details or steps to reproduce the bug."
-                rows={5}
-                required
-              ></textarea>
-            </div>
-
-            {/* Nickname */}
-            <div className="mb-4">
-              <label htmlFor="nickname">Your Name/Nickname</label>
-              <input
-                className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
-                id="nickname"
-                name="Nickname"
-                placeholder="Leave blank if you want to stay anonymous."
-              />
-            </div>
-
-            {/* Honeypot field - hidden from users, visible to bots */}
-            <div className="absolute opacity-0 pointer-events-none" aria-hidden="true">
-              <label htmlFor="Name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="Name"
-                tabIndex={-1}
-                autoComplete="off"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="flex flex-row justify-between text-slate-100">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg"
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? "Submitting..." : "Submit Bug Report"}
-              </button>
-
-              <button
-                className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+          {/* Bug Submission Form - Right on desktop, Bottom on mobile */}
+          <div className="w-full md:w-3/5 flex-1 overflow-y-auto">
+            <BugSubmissionForm
+              onSubmit={handleSubmit}
+              onCancel={onClose}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
   );
 }
 
