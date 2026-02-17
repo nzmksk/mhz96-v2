@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import { ExternalLink } from "lucide-react";
 
 interface ReportBugFormProps {
   onClose: () => void;
@@ -18,9 +19,22 @@ type BugReportData = {
   honeypot?: string;
 };
 
+interface SimilarIssue {
+  number: number;
+  title: string;
+  url: string;
+  state: string;
+  similarity: number;
+}
+
 function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [similarIssues, setSimilarIssues] = useState<SimilarIssue[]>([]);
+  const [showSimilarIssues, setShowSimilarIssues] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const modalRef = useRef<HTMLElement | null>(null);
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
 
   const closeReportBugForm = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
@@ -28,8 +42,66 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
     }
   };
 
+  async function searchSimilarIssues(title: string) {
+    if (!title || title.trim().length < 3) {
+      setSimilarIssues([]);
+      setShowSimilarIssues(false);
+      setHasSearched(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const response = await fetch("/api/search-similar-issues", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSimilarIssues(data.similar || []);
+        setShowSimilarIssues(data.similar && data.similar.length > 0);
+        setHasSearched(true);
+      } else {
+        console.error("Failed to search for similar issues");
+        setSimilarIssues([]);
+        setShowSimilarIssues(false);
+        setHasSearched(false);
+      }
+    } catch (error) {
+      console.error("Error searching for similar issues:", error);
+      setSimilarIssues([]);
+      setShowSimilarIssues(false);
+      setHasSearched(false);
+    } finally {
+      setIsSearching(false);
+    }
+  }
+
+  function handleTitleBlur() {
+    const title = titleInputRef.current?.value;
+    if (title && !hasSearched) {
+      searchSimilarIssues(title);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // If we haven't searched yet and there are similar issues, show them first
+    if (!hasSearched) {
+      const title = titleInputRef.current?.value;
+      if (title) {
+        await searchSimilarIssues(title);
+        if (similarIssues.length > 0) {
+          return; // Don't submit yet, let user review similar issues
+        }
+      }
+    }
+
     setIsLoading(true);
 
     const form = new FormData(e.currentTarget);
@@ -104,13 +176,56 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
                 Title<span className="text-red-700">*</span>
               </label>
               <input
+                ref={titleInputRef}
                 className="w-full border border-solid border-slate-400 rounded-lg shadow-lg p-2"
                 id="title"
                 name="Title"
                 placeholder="Short description about the bug."
+                onBlur={handleTitleBlur}
                 required
               />
+              {isSearching && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Searching for similar issues...
+                </p>
+              )}
             </div>
+
+            {/* Similar Issues Warning */}
+            {showSimilarIssues && similarIssues.length > 0 && (
+              <div className="mb-4 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                <h3 className="font-semibold text-yellow-800 mb-2">
+                  ⚠️ Similar issues found
+                </h3>
+                <p className="text-sm text-yellow-700 mb-3">
+                  We found {similarIssues.length} similar issue{similarIssues.length > 1 ? "s" : ""}.
+                  Please check if your bug has already been reported:
+                </p>
+                <ul className="space-y-2">
+                  {similarIssues.map((issue) => (
+                    <li key={issue.number} className="text-sm">
+                      <a
+                        href={issue.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        <span className="font-medium">#{issue.number}</span>
+                        <span className="mx-2">-</span>
+                        <span>{issue.title}</span>
+                        <ExternalLink className="ml-1 w-3 h-3" />
+                        <span className="ml-auto text-xs text-gray-500">
+                          ({Math.round(issue.similarity * 100)}% match)
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-sm text-yellow-700 mt-3">
+                  If none of these match your issue, you can still submit your report below.
+                </p>
+              </div>
+            )}
 
             {/* Device type */}
             <div className="mb-4">
@@ -203,14 +318,19 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
               <button
                 className="bg-blue-500 hover:bg-blue-700 py-3 mr-4 w-1/2 rounded-lg hover:shadow-lg"
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || isSearching}
               >
-                {isLoading ? "Submitting..." : "Submit Bug Report"}
+                {isLoading
+                  ? "Submitting..."
+                  : showSimilarIssues && similarIssues.length > 0
+                  ? "Submit Anyway"
+                  : "Submit Bug Report"}
               </button>
 
               <button
                 className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
                 onClick={onClose}
+                type="button"
               >
                 Cancel
               </button>
