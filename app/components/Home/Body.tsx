@@ -8,7 +8,11 @@ import { Cursor, useTypewriter } from "react-simple-typewriter";
 import ContactForm from "@/app/components/Home/ContactForm";
 import ReportBugForm from "@/app/components/Home/ReportBugForm";
 
-function Body() {
+interface BodyProps {
+  showSnackbar: (message: string, type: "success" | "error") => void;
+}
+
+function Body({ showSnackbar }: BodyProps) {
   const [showContactForm, setShowContactForm] = useState(false);
   const [showReportBugForm, setShowReportBugForm] = useState(false);
   const [text, count] = useTypewriter({
@@ -84,7 +88,10 @@ function Body() {
         <ContactForm onClose={() => setShowContactForm(false)} />
       )}
       {showReportBugForm && (
-        <ReportBugForm onClose={() => setShowReportBugForm(false)} />
+        <ReportBugForm
+          onClose={() => setShowReportBugForm(false)}
+          showSnackbar={showSnackbar}
+        />
       )}
     </>
   );
