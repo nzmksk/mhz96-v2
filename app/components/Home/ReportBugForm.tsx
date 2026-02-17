@@ -239,7 +239,6 @@ ${data.details}
 
 **Submitted by:** ${data.nickname ?? "Anonymous"}`,
       labels: labels,
-      honeypot: data.honeypot,
     }),
   });
 
