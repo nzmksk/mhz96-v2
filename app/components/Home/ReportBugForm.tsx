@@ -40,11 +40,23 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [issues, setIssues] = useState<GitHubIssue[]>([]);
   const [isLoadingIssues, setIsLoadingIssues] = useState<boolean>(true);
   const [issuesError, setIssuesError] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Trigger fade-in animation after mount
+    setTimeout(() => setIsVisible(true), 10);
+  }, []);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    // Wait for fade-out animation to complete before calling onClose
+    setTimeout(() => onClose(), 300);
+  };
 
   const closeReportBugForm = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
-      onClose();
+      handleClose();
     }
   };
 
@@ -100,7 +112,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       await fetchIssues();
 
       // Close the form after successful submission
-      onClose();
+      handleClose();
     } catch (error) {
       if (error instanceof Error) {
         console.error("GitHub API error:", error.message);
@@ -116,11 +128,15 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
 
   return (
     <section
-      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center p-4"
+      className={`fixed inset-0 backdrop-blur-sm flex justify-center items-center p-4 transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
       onClick={closeReportBugForm}
       ref={modalRef}
     >
-      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden">
+      <div className={`bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden transition-all duration-300 ${
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+      }`}>
         <div className="flex flex-col md:flex-row h-full overflow-hidden">
           {/* Issue List - Left on desktop, Top on mobile */}
           <div className="w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex items-center justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible">
@@ -136,7 +152,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
           <div className="w-full md:w-3/5 flex-1 overflow-y-auto">
             <BugSubmissionForm
               onSubmit={handleSubmit}
-              onCancel={onClose}
+              onCancel={handleClose}
               isLoading={isLoading}
             />
           </div>

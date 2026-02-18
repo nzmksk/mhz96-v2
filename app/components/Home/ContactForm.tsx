@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ContactFormProps {
   onClose: () => void;
@@ -8,20 +8,36 @@ interface ContactFormProps {
 
 function ContactForm({ onClose }: ContactFormProps) {
   const modalRef = useRef<HTMLElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Trigger fade-in animation after mount
+    setTimeout(() => setIsVisible(true), 10);
+  }, []);
 
   const closeContactForm = (e: React.MouseEvent<HTMLElement>) => {
     if (modalRef.current === e.target) {
-      onClose();
+      handleClose();
     }
+  };
+
+  const handleClose = () => {
+    setIsVisible(false);
+    // Wait for fade-out animation to complete before calling onClose
+    setTimeout(() => onClose(), 300);
   };
 
   return (
     <section
-      className="fixed inset-0 backdrop-blur-sm flex justify-center items-center"
+      className={`fixed inset-0 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
       onClick={closeContactForm}
       ref={modalRef}
     >
-      <div className="bg-white shadow-lg rounded-lg flex flex-col max-w-lg p-8">
+      <div className={`bg-white shadow-lg rounded-lg flex flex-col max-w-lg p-8 transition-all duration-300 ${
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+      }`}>
         <h2 className="text-lg font-bold mb-4">Contact Me</h2>
 
         <form
@@ -92,7 +108,7 @@ function ContactForm({ onClose }: ContactFormProps) {
 
             <button
               className="bg-slate-700 hover:bg-slate-900 py-3 w-1/2 rounded-lg hover:shadow-lg"
-              onClick={onClose}
+              onClick={handleClose}
             >
               Close
             </button>
