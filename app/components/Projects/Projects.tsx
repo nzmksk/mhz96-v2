@@ -7,7 +7,7 @@ import {
   ChevronRight,
   AlertCircle,
 } from "lucide-react";
-import { GitHubRepo } from "@/app/api/get-repos/route";
+import { GitHubRepo } from "@/lib/interfaces";
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: "#3178c6",
