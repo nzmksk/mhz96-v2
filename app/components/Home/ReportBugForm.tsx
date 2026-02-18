@@ -174,12 +174,15 @@ async function createGithubIssue(data: BugReportData): Promise<void> {
     },
     body: JSON.stringify({
       title: data.title,
-      body: `**Details:**
+      body: `## Description
 ${data.details}
 
-**Device Type:** ${data.deviceType ?? "Not specified"}
-**Operating System:** ${data.os ?? "Not specified"}
-**Browser:** ${data.browser ?? "Not specified"}
+## System Info
+| System Info | Value |
+| --- | --- |
+| Device type | ${data.deviceType ?? "Unspecified"} |
+| Operating system | ${data.os ?? "Unspecified"} |
+| Browser | ${data.browser ?? "Unspecified"} |
 
 **Submitted by:** ${data.nickname ?? "Anonymous"}`,
       labels: labels,
