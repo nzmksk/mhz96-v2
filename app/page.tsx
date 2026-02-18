@@ -20,10 +20,10 @@ export default function Home() {
   return (
     <main
       className="h-screen overflow-y-scroll scroll-smooth bg-gradient-to-b from-slate-800 to-slate-600"
-      id="home"
+      id="scroll-container"
     >
-      <SectionContainer>
-        <Header />
+      <Header />
+      <SectionContainer className="pt-24" id="home">
         <Body showSnackbar={showSnackbar} />
       </SectionContainer>
       <SectionContainer
