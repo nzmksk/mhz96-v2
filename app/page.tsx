@@ -32,7 +32,7 @@ export default function Home() {
       >
         <Experience />
       </SectionContainer>
-      <SectionContainer className="bg-slate-600" id="projects">
+      <SectionContainer className="bg-slate-600 flex justify-center items-center" id="projects">
         <Projects />
       </SectionContainer>
 
