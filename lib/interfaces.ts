@@ -113,7 +113,7 @@ export interface GitHubRepo {
   permissions: RepoPermission;
 }
 
-interface IssueLabel {
+export interface GitHubLabel {
   name: string;
   color: string;
 }
@@ -156,7 +156,7 @@ export interface GitHubIssue {
   number: number; // 33,
   title: string; // 'Navigation bar is blocking report bug form',
   user: RepoOwner;
-  labels: IssueLabel[];
+  labels: GitHubLabel[];
   state: string; // 'open',
   locked: boolean; // false;
   assignee?: string;
@@ -177,4 +177,9 @@ export interface GitHubIssue {
   performed_via_github_app?: string;
   state_reason?: string;
   pinned_comment?: string;
+}
+
+export interface BugStats {
+  reported: number;
+  resolved: number;
 }

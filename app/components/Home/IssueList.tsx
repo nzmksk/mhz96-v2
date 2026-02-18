@@ -7,31 +7,25 @@ import {
   AlertCircle,
   CheckCircle2,
   MessageCircle,
+  Bug,
 } from "lucide-react";
-
-interface GitHubLabel {
-  name: string;
-  color: string;
-}
-
-interface GitHubIssue {
-  number: number;
-  title: string;
-  state: string;
-  html_url: string;
-  created_at: string;
-  labels: GitHubLabel[];
-  comments: number;
-}
+import { BugStats, GitHubIssue } from "@/lib/interfaces";
 
 interface IssueListProps {
   issues: GitHubIssue[];
   isLoading: boolean;
   error: string | null;
   onRefresh: () => void;
+  stats?: BugStats | null;
 }
 
-function IssueList({ issues, isLoading, error, onRefresh }: IssueListProps) {
+function IssueList({
+  issues,
+  isLoading,
+  error,
+  onRefresh,
+  stats,
+}: IssueListProps) {
   if (isLoading) {
     return <IssueListSkeleton />;
   }
@@ -41,7 +35,7 @@ function IssueList({ issues, isLoading, error, onRefresh }: IssueListProps) {
   }
 
   if (issues.length === 0) {
-    return <IssueListEmpty />;
+    return <IssueListEmpty stats={stats} />;
   }
 
   return (
@@ -57,11 +51,44 @@ function IssueList({ issues, isLoading, error, onRefresh }: IssueListProps) {
         </button>
       </div>
 
+      {stats && <BugStatsBar stats={stats} />}
+
       <div className="space-y-3">
         {issues.map((issue) => (
           <IssueCard key={issue.number} issue={issue} />
         ))}
       </div>
+    </div>
+  );
+}
+
+function BugStatsBar({ stats }: { stats: BugStats }) {
+  const resolvedPercent =
+    stats.reported > 0
+      ? Math.round((stats.resolved / stats.reported) * 100)
+      : 0;
+
+  return (
+    <div className="mb-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
+      <div className="flex items-center gap-2 mb-2">
+        <Bug className="w-4 h-4 text-slate-500" />
+        <span className="text-sm font-medium text-slate-700">
+          Bug Report Stats
+        </span>
+      </div>
+      <div className="flex justify-between text-xs text-slate-500 mb-1.5">
+        <span>{stats.reported} reported</span>
+        <span>{stats.resolved} resolved</span>
+      </div>
+      <div className="w-full bg-slate-200 rounded-full h-2">
+        <div
+          className="bg-green-500 h-2 rounded-full transition-all duration-500"
+          style={{ width: `${resolvedPercent}%` }}
+        />
+      </div>
+      <p className="text-xs text-slate-400 mt-1.5 text-right">
+        {resolvedPercent}% resolved
+      </p>
     </div>
   );
 }
@@ -96,7 +123,8 @@ function IssueCard({ issue }: { issue: GitHubIssue }) {
               className="text-xs px-2 py-0.5 rounded-full"
               style={{
                 // If the label color is very light (like 'ededed'), use a darker background for better contrast
-                backgroundColor: label.color == 'ededed' ? `#334155` : `#${label.color}20`,
+                backgroundColor:
+                  label.color == "ededed" ? `#334155` : `#${label.color}20`,
                 color: `#${label.color}`,
                 border: `1px solid #${label.color}40`,
               }}
@@ -152,19 +180,32 @@ function IssueListSkeleton() {
   );
 }
 
-function IssueListEmpty() {
+function IssueListEmpty({ stats }: { stats?: BugStats | null }) {
   return (
     <div className="p-4 flex flex-col items-center justify-center min-h-[300px] text-center">
       <CheckCircle2 className="w-12 h-12 text-green-500 mb-3" />
       <h3 className="text-lg font-semibold mb-1">No Open Issues</h3>
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-slate-500 mb-4">
         Great! There are currently no open bug reports.
       </p>
+      {stats && stats.reported > 0 && (
+        <div className="text-xs text-slate-400">
+          <span>{stats.reported} bugs reported</span>
+          <span className="mx-1">&middot;</span>
+          <span>{stats.resolved} resolved</span>
+        </div>
+      )}
     </div>
   );
 }
 
-function IssueListError({ error, onRetry }: { error: string; onRetry: () => void }) {
+function IssueListError({
+  error,
+  onRetry,
+}: {
+  error: string;
+  onRetry: () => void;
+}) {
   return (
     <div className="p-4 flex flex-col items-center justify-center h-full text-center">
       <AlertCircle className="w-12 h-12 text-red-500 mb-3" />

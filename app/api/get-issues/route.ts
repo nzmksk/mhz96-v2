@@ -3,7 +3,10 @@ import { octokit, username, repository, CACHE_DURATION } from "@/lib/constants";
 import { GitHubIssue } from "@/lib/interfaces";
 
 // Cache configuration
-let cachedIssues: any[] | null = null;
+let cachedData: {
+  issues: GitHubIssue[];
+  stats: { reported: number; resolved: number };
+} | null = null;
 let cacheTimestamp: number | null = null;
 
 export async function GET() {
@@ -11,38 +14,78 @@ export async function GET() {
     // Check if cache is still valid
     const now = Date.now();
     if (
-      cachedIssues !== null &&
+      cachedData !== null &&
       cacheTimestamp !== null &&
       now - cacheTimestamp < CACHE_DURATION
     ) {
       return NextResponse.json({
-        issues: cachedIssues,
+        ...cachedData,
         cached: true,
         cacheAge: Math.floor((now - cacheTimestamp) / 1000),
       });
     }
 
-    // Fetch fresh data from GitHub
-    const response = await octokit.request("GET /repos/{owner}/{repo}/issues", {
-      owner: username,
-      repo: repository,
-      state: "open",
-      sort: "created",
-      direction: "desc",
-      per_page: 20,
+    // Fetch all issues with pagination
+    let allIssuesData: any[] = [];
+    let page = 1;
+    let hasMorePages = true;
+
+    while (hasMorePages) {
+      const response = await octokit.request(
+        "GET /repos/{owner}/{repo}/issues",
+        {
+          owner: username,
+          repo: repository,
+          state: "all",
+          sort: "created",
+          direction: "desc",
+          per_page: 100,
+          page: page,
+        }
+      );
+
+      allIssuesData = allIssuesData.concat(response.data);
+
+      // If we got less than 100 items, we've reached the last page
+      if (response.data.length < 100) {
+        hasMorePages = false;
+      } else {
+        page++;
+      }
+    }
+
+    // Filter out pull requests
+    const allIssues: GitHubIssue[] = allIssuesData
+      .filter((issue: any) => !issue.html_url.includes("/pull/"))
+      .map((issue: any) => issue as GitHubIssue);
+
+    // Filter for bugs (has "bug" label and NOT "invalid" label)
+    const allBugs = allIssues.filter((issue: GitHubIssue) => {
+      const hasbugLabel = issue.labels.some((l: any) => l.name === "bug");
+      const isValid = issue.labels.some(
+        (l: any) => l.name !== "invalid" && l.name !== "duplicate"
+      );
+      return hasbugLabel && isValid;
     });
 
-    // Extract only the fields we need to reduce payload size
-    const issues: GitHubIssue[] = response.data
-      .map((issue: any) => issue as GitHubIssue)
-      .filter((issue: GitHubIssue) => !issue.html_url.includes("/pull/")); // Exclude pull requests
+    // Filter for open bugs only (to be displayed in open issues section)
+    const openBugs = allBugs.filter(
+      (issue: GitHubIssue) => issue.state === "open"
+    );
+
+    // Calculate stats
+    const stats = {
+      reported: allBugs.length, // Total bugs reported (open + closed)
+      resolved: allBugs.length - openBugs.length, // Closed bugs
+    };
 
     // Update cache
-    cachedIssues = issues;
+    cachedData = { issues: openBugs, stats };
     cacheTimestamp = now;
 
     return NextResponse.json({
-      issues,
+      issues: openBugs,
+      stats,
       cached: false,
       cacheAge: 0,
     });
