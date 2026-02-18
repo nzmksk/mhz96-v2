@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import IssueList, { BugStats } from "@/app/components/Home/IssueList";
+import IssueList from "@/app/components/Home/IssueList";
 import BugSubmissionForm from "@/app/components/Home/BugSubmissionForm";
+import { BugStats, GitHubIssue } from "@/lib/interfaces";
 
 interface ReportBugFormProps {
   onClose: () => void;
@@ -19,21 +20,6 @@ type BugReportData = {
   nickname?: string;
   honeypot?: string;
 };
-
-interface GitHubLabel {
-  name: string;
-  color: string;
-}
-
-interface GitHubIssue {
-  number: number;
-  title: string;
-  state: string;
-  html_url: string;
-  created_at: string;
-  labels: GitHubLabel[];
-  comments: number;
-}
 
 function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -123,7 +109,10 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
         showSnackbar(`Failed to submit bug report: ${error.message}`, "error");
       } else {
         console.error("Unknown error:", error);
-        showSnackbar("Failed to submit bug report due to an unknown error.", "error");
+        showSnackbar(
+          "Failed to submit bug report due to an unknown error.",
+          "error"
+        );
       }
     } finally {
       setIsLoading(false);
@@ -138,12 +127,20 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       onClick={closeReportBugForm}
       ref={modalRef}
     >
-      <div className={`bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden transition-all duration-300 ${
-        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-      }`}>
+      <div
+        className={`bg-white shadow-lg rounded-lg flex flex-col max-w-5xl max-h-[90vh] w-full overflow-hidden transition-all duration-300 ${
+          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
+      >
         <div className="flex flex-col md:flex-row h-full overflow-hidden">
           {/* Issue List - Left on desktop, Top on mobile */}
-          <div className={`w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible ${isLoadingIssues || issues.length > 0 ? "items-start" : "items-center"}`}>
+          <div
+            className={`w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible ${
+              isLoadingIssues || issues.length > 0
+                ? "items-start"
+                : "items-center"
+            }`}
+          >
             <IssueList
               issues={issues}
               isLoading={isLoadingIssues}
