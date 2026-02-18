@@ -127,7 +127,7 @@ function IssueCard({ issue }: { issue: GitHubIssue }) {
 
 function IssueListSkeleton() {
   return (
-    <div className="p-4 w-full">
+    <div className="p-4 w-full h-full">
       <div className="flex justify-between items-center mb-4">
         <div className="h-6 w-32 bg-slate-200 rounded animate-pulse"></div>
         <div className="h-8 w-8 bg-slate-200 rounded-lg animate-pulse"></div>
@@ -166,7 +166,7 @@ function IssueListEmpty() {
 
 function IssueListError({ error, onRetry }: { error: string; onRetry: () => void }) {
   return (
-    <div className="p-4 flex flex-col items-center justify-center min-h-[300px] text-center">
+    <div className="p-4 flex flex-col items-center justify-center h-full text-center">
       <AlertCircle className="w-12 h-12 text-red-500 mb-3" />
       <h3 className="text-lg font-semibold mb-1">Failed to Load Issues</h3>
       <p className="text-sm text-slate-500 mb-4">{error}</p>
