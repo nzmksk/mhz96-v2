@@ -5,7 +5,9 @@
       "Bash(npm install:*)",
       "Bash(timeout 15 npm run dev:*)",
       "Bash(npm run dev)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gh issue view:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
