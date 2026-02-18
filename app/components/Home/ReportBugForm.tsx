@@ -139,7 +139,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       }`}>
         <div className="flex flex-col md:flex-row h-full overflow-hidden">
           {/* Issue List - Left on desktop, Top on mobile */}
-          <div className="w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex items-center justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible">
+          <div className={`w-full md:w-2/5 border-b md:border-b-0 md:border-r border-slate-200 flex justify-center max-h-[30vh] md:max-h-none overflow-y-auto md:overflow-visible ${isLoadingIssues || issues.length > 0 ? "items-start" : "items-center"}`}>
             <IssueList
               issues={issues}
               isLoading={isLoadingIssues}
