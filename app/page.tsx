@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Body from "@/app/components/Home/Body";
 import Experience from "@/app/components/Experience/Experience";
-import Header from "@/app/components/Home/Header";
+import Header from "@/app/components/Header";
 import Projects from "@/app/components/Projects/Projects";
 import SectionContainer from "@/app/components/SectionContainer";
 import Snackbar from "@/app/components/Snackbar";
