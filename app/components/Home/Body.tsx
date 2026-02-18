@@ -18,7 +18,6 @@ function Body({ showSnackbar }: BodyProps) {
   const [text, count] = useTypewriter({
     words: [
       "software engineer.",
-      "self-taught developer.",
       "software developer.",
       "back-end developer.",
       "web developer.",
