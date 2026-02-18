@@ -29,7 +29,7 @@ function ContactForm({ onClose }: ContactFormProps) {
 
   return (
     <section
-      className={`fixed inset-0 backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[60] backdrop-blur-sm flex justify-center items-center transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       onClick={closeContactForm}
