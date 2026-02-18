@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import IssueList from "@/app/components/Home/IssueList";
+import IssueList, { BugStats } from "@/app/components/Home/IssueList";
 import BugSubmissionForm from "@/app/components/Home/BugSubmissionForm";
 
 interface ReportBugFormProps {
@@ -40,6 +40,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
   const [issues, setIssues] = useState<GitHubIssue[]>([]);
   const [isLoadingIssues, setIsLoadingIssues] = useState<boolean>(true);
   const [issuesError, setIssuesError] = useState<string | null>(null);
+  const [bugStats, setBugStats] = useState<BugStats | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLElement | null>(null);
 
@@ -73,6 +74,9 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
       }
 
       setIssues(data.issues || []);
+      if (data.stats) {
+        setBugStats(data.stats);
+      }
     } catch (err: any) {
       console.error("Error fetching issues:", err);
       setIssuesError(err.message || "Failed to load issues");
@@ -145,6 +149,7 @@ function ReportBugForm({ onClose, showSnackbar }: ReportBugFormProps) {
               isLoading={isLoadingIssues}
               error={issuesError}
               onRefresh={fetchIssues}
+              stats={bugStats}
             />
           </div>
 
