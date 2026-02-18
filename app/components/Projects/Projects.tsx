@@ -7,14 +7,7 @@ import {
   ChevronRight,
   AlertCircle,
 } from "lucide-react";
-
-interface Repo {
-  name: string;
-  description: string | null;
-  html_url: string;
-  language: string | null;
-  updated_at: string;
-}
+import { GitHubRepo } from "@/app/api/get-repos/route";
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: "#3178c6",
@@ -40,7 +33,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
 const ITEMS_PER_PAGE = 6;
 
 function Projects() {
-  const [repos, setRepos] = useState<Repo[]>([]);
+  const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -134,7 +127,7 @@ function Projects() {
   );
 }
 
-function ProjectCard({ repo }: { repo: Repo }) {
+function ProjectCard({ repo }: { repo: GitHubRepo }) {
   const relativeTime = getRelativeTime(repo.updated_at);
   const langColor = repo.language
     ? LANGUAGE_COLORS[repo.language] || "#8b949e"
