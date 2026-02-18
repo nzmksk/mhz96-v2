@@ -23,7 +23,7 @@ export default function Home() {
       id="scroll-container"
     >
       <Header />
-      <SectionContainer className="pt-24" id="home">
+      <SectionContainer className="pt-24 flex flex-col" id="home">
         <Body showSnackbar={showSnackbar} />
       </SectionContainer>
       <SectionContainer
