@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Body from "@/app/components/Home/Body";
 import Experience from "@/app/components/Experience/Experience";
-import Header from "@/app/components/Home/Header";
+import Header from "@/app/components/Header";
 import Projects from "@/app/components/Projects/Projects";
 import SectionContainer from "@/app/components/SectionContainer";
 import Snackbar from "@/app/components/Snackbar";
@@ -23,7 +23,7 @@ export default function Home() {
       id="scroll-container"
     >
       <Header />
-      <SectionContainer className="pt-24" id="home">
+      <SectionContainer className="pt-24 flex flex-col" id="home">
         <Body showSnackbar={showSnackbar} />
       </SectionContainer>
       <SectionContainer
@@ -32,7 +32,7 @@ export default function Home() {
       >
         <Experience />
       </SectionContainer>
-      <SectionContainer className="bg-slate-600" id="projects">
+      <SectionContainer className="bg-slate-600 flex justify-center items-center" id="projects">
         <Projects />
       </SectionContainer>
 

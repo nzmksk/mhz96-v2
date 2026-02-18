@@ -18,7 +18,6 @@ function Body({ showSnackbar }: BodyProps) {
   const [text, count] = useTypewriter({
     words: [
       "software engineer.",
-      "self-taught developer.",
       "software developer.",
       "back-end developer.",
       "web developer.",
@@ -52,7 +51,7 @@ function Body({ showSnackbar }: BodyProps) {
 
   return (
     <>
-      <div className="container px-4 mx-auto">
+      <div className="container px-4 mx-auto flex-1 flex items-center">
         <div className="flex flex-col-reverse justify-between md:flex-row md:space-x-4">
           <div className="w-full flex flex-col items-start md:w-2/4 mt-0 md:mt-4 justify-center">
             <h1 className="text-white text-3xl lg:text-5xl font-semibold">

@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
-import { Octokit } from "@octokit/core";
-
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-const username = "nzmksk";
-const repository = "mhz96-v2";
+import { octokit, username, repository, CACHE_DURATION } from "@/lib/constants";
+import { GitHubIssue } from "@/lib/interfaces";
 
 // Cache configuration
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 let cachedIssues: any[] | null = null;
 let cacheTimestamp: number | null = null;
 
@@ -37,18 +33,9 @@ export async function GET() {
     });
 
     // Extract only the fields we need to reduce payload size
-    const issues = response.data
-      .map((issue: any) => ({
-        number: issue.number,
-        title: issue.title,
-        html_url: issue.html_url,
-        created_at: issue.created_at,
-        labels: issue.labels.map((label: any) => ({
-          name: label.name,
-          color: label.color,
-        })),
-      }))
-      .filter((issue: any) => !issue.html_url.includes("/pull/")); // Exclude pull requests
+    const issues: GitHubIssue[] = response.data
+      .map((issue: any) => issue as GitHubIssue)
+      .filter((issue: GitHubIssue) => !issue.html_url.includes("/pull/")); // Exclude pull requests
 
     // Update cache
     cachedIssues = issues;
